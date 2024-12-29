@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Chess Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #chessboard {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-template-rows: repeat(6, 60px);
+            border: 2px solid black;
+        }
+        .square {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        .light {
+            background-color: #f0d9b5;
+        }
+        .dark {
+            background-color: #b58863;
+        }
+        .highlight {
+            outline: 2px solid yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="chessboard"></div>
+
+    <script>
+        const board = [
+            ["♜", "♞", "♝", "♛", "♚"],
+            ["♟", "♟", "♟", "♟", "♟"],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["♙", "♙", "♙", "♙", "♙"],
+            ["♖", "♘", "♗", "♕", "♔"],
+        ];
+
+        const chessboard = document.getElementById("chessboard");
+
+        function renderBoard() {
+            chessboard.innerHTML = "";
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const square = document.createElement("div");
+                    square.classList.add("square", (row + col) % 2 === 0 ? "light" : "dark");
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+                    square.textContent = board[row][col];
+                    chessboard.appendChild(square);
+                }
+            }
+        }
+
+        let selectedPiece = null;
+        chessboard.addEventListener("click", (e) => {
+            const square = e.target;
+            if (!square.classList.contains("square")) return;
+
+            const row = parseInt(square.dataset.row);
+            const col = parseInt(square.dataset.col);
+
+            if (selectedPiece) {
+                movePiece(selectedPiece.row, selectedPiece.col, row, col);
+                selectedPiece = null;
+                renderBoard();
+            } else if (board[row][col]) {
+                selectedPiece = { row, col };
+                square.classList.add("highlight");
+            }
+        });
+
+        function movePiece(startRow, startCol, endRow, endCol) {
+            if (isValidMove(startRow, startCol, endRow, endCol)) {
+                board[endRow][endCol] = board[startRow][startCol];
+                board[startRow][startCol] = "";
+            }
+        }
+
+        function isValidMove(startRow, startCol, endRow, endCol) {
+            // Placeholder for valid move logic.
+            return true;
+        }
+
+        renderBoard();
+    </script>
+</body>
+</html>
